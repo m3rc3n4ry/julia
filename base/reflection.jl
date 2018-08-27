@@ -1076,6 +1076,15 @@ Make method `m` uncallable and force recompilation of any methods that use(d) it
 """
 function delete_method(m::Method)
     ccall(:jl_method_table_disable, Cvoid, (Any, Any), get_methodtable(m), m)
+    if m.ambig !== nothing
+        for m2 in m.ambig
+            if m2.ambig !== nothing
+                i = findfirst(isequal(m), m2.ambig)
+                i === nothing || deleteat!(m2.ambig, i)
+            end
+        end
+    end
+    nothing
 end
 
 function get_methodtable(m::Method)

@@ -764,6 +764,18 @@ Base.delete_method(first(methods(foo)))
 @test_throws MethodError foo(1, 1)
 @test map(g->g.ambig==nothing, methods(foo)) == [false, false]
 
+# pre-existing ambiguities (#28899)
+uambig(::Union{Nothing,Int}) = 1
+uambig(::Union{Nothing,Float64}) = 2
+@test uambig(1) == 1
+@test uambig(1.0) == 2
+@test_throws MethodError uambig(nothing)
+m = which(uambig, Tuple{Int})
+Base.delete_method(m)
+@test_throws MethodError uambig(1)
+@test uambig(1.0) == 2
+@test uambig(nothing) == 2
+
 # multiple deletions and ambiguities
 typeparam(::Type{T}, a::Array{T}) where T<:AbstractFloat = 1
 typeparam(::Type{T}, a::Array{T}) where T = 2
