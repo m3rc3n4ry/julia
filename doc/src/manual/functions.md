@@ -140,6 +140,10 @@ Int8
 This function will always return an `Int8` regardless of the types of `x` and `y`.
 See [Type Declarations](@ref) for more on return types.
 
+Using a `;` at the end of a function, as in the example above, will terminate the function declaration right 
+there, and unlike all the examples of functions we've seen yet, nothing like `g (generic function with 
+1 method)` will be shown on the output screen after declaring the function (as you can see above).
+
 ## Operators Are Functions
 
 In Julia, most operators are just functions with support for special syntax. (The exceptions are
